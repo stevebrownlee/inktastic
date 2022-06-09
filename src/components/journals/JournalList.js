@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { getJournals } from "../../managers/APIManager"
+import { Journal } from "./Journal"
 
 export const JournalList = () => {
     const [journals, setJournals] = useState([])
+    const navigate = useNavigate()
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("ink_user"))
@@ -12,14 +15,16 @@ export const JournalList = () => {
     return <>
         <h2>Your Journals</h2>
 
-        {
-            journals.map(
-                journal => <section className="journal">
-                    <div className="journal__size">{journal.size}</div>
-                    <div className="journal__manufacturer">{journal.manufacturer}</div>
-                    <div className="journal__date">{new Date(journal.datePurchased).toLocaleDateString()}</div>
-                </section>
-            )
-        }
+        <button onClick={() => navigate("/journals/new")}>New Journal</button>
+        <article>
+            {
+                journals.map(
+                    journal => <Journal manufacturer={journal.manufacturer}
+                        size={journal.size}
+                        datePurchased={journal.datePurchased}
+                    />
+                )
+            }
+        </article>
     </>
 }
